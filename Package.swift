@@ -58,6 +58,9 @@ let package = Package(
                 .headerSearchPath("iOS"),
                 .headerSearchPath("macOS"),
                 .headerSearchPath("macOS/LoopbackHTTPServer"),
+            ],
+            linkerSettings: [
+                .unsafeFlags(["-fprofile-instr-generate"], .when(configuration: .debug))
             ]
         ),
         .target(
