@@ -300,6 +300,14 @@ static NSString *const kAdditionalHeadersKey = @"additionalHeaders";
   return _configuration.tokenEndpoint;
 }
 
+/*! @brief Constructs the request URI.
+    @return A URL representing the token refresh request.
+    @see https://tools.ietf.org/html/rfc6749#section-4.1.3
+ */
+- (NSURL *)refreshTokenRequestURL {
+  return _configuration.refreshTokenEndpoint ?: _configuration.tokenEndpoint;
+}
+
 /*! @brief Constructs the request body data by combining the request parameters using the
         "application/x-www-form-urlencoded" format.
     @return The data to pass to the token request URL.
@@ -340,7 +348,7 @@ static NSString *const kAdditionalHeadersKey = @"additionalHeaders";
   static NSString *const kHTTPContentTypeHeaderValue =
       @"application/x-www-form-urlencoded; charset=UTF-8";
 
-  NSURL *tokenRequestURL = [self tokenRequestURL];
+  NSURL *tokenRequestURL = [self.grantType isEqual:OIDGrantTypeRefreshToken] ? [self refreshTokenRequestURL] : [self tokenRequestURL];
   NSMutableURLRequest *URLRequest = [[NSURLRequest requestWithURL:tokenRequestURL] mutableCopy];
   URLRequest.HTTPMethod = kHTTPPost;
   [URLRequest setValue:kHTTPContentTypeHeaderValue forHTTPHeaderField:kHTTPContentTypeHeaderKey];

@@ -30,6 +30,10 @@ static NSString *const kAuthorizationEndpointKey = @"authorizationEndpoint";
  */
 static NSString *const kTokenEndpointKey = @"tokenEndpoint";
 
+/*! @brief The key for the @c refreshTokenEndpoint property.
+ */
+static NSString *const kRefreshTokenEndpointKey = @"refreshTokenEndpoint";
+
 /*! @brief The key for the @c issuer property.
  */
 static NSString *const kIssuerKey = @"issuer";
@@ -52,6 +56,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithAuthorizationEndpoint:(NSURL *)authorizationEndpoint
                                 tokenEndpoint:(NSURL *)tokenEndpoint
+                         refreshTokenEndpoint:(nullable NSURL *)refreshTokenEndpoint
                                        issuer:(nullable NSURL *)issuer
                          registrationEndpoint:(nullable NSURL *)registrationEndpoint
                            endSessionEndpoint:(nullable NSURL *)endSessionEndpoint
@@ -70,6 +75,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithAuthorizationEndpoint:(NSURL *)authorizationEndpoint
         tokenEndpoint:(NSURL *)tokenEndpoint
+ refreshTokenEndpoint:(nullable NSURL *)refreshTokenEndpoint
                issuer:(nullable NSURL *)issuer
  registrationEndpoint:(nullable NSURL *)registrationEndpoint
    endSessionEndpoint:(nullable NSURL *)endSessionEndpoint
@@ -79,6 +85,7 @@ NS_ASSUME_NONNULL_BEGIN
   if (self) {
     _authorizationEndpoint = [authorizationEndpoint copy];
     _tokenEndpoint = [tokenEndpoint copy];
+    _refreshTokenEndpoint = [refreshTokenEndpoint copy];
     _issuer = [issuer copy];
     _registrationEndpoint = [registrationEndpoint copy];
     _endSessionEndpoint = [endSessionEndpoint copy];
@@ -91,6 +98,19 @@ NS_ASSUME_NONNULL_BEGIN
                                 tokenEndpoint:(NSURL *)tokenEndpoint {
   return [self initWithAuthorizationEndpoint:authorizationEndpoint
                                tokenEndpoint:tokenEndpoint
+                        refreshTokenEndpoint:nil
+                                      issuer:nil
+                        registrationEndpoint:nil
+                          endSessionEndpoint:nil
+                           discoveryDocument:nil];
+}
+
+- (instancetype)initWithAuthorizationEndpoint:(NSURL *)authorizationEndpoint
+                                tokenEndpoint:(NSURL *)tokenEndpoint
+                         refreshTokenEndpoint:(nullable NSURL *)refreshTokenEndpoint {
+  return [self initWithAuthorizationEndpoint:authorizationEndpoint
+                               tokenEndpoint:tokenEndpoint
+                        refreshTokenEndpoint:refreshTokenEndpoint
                                       issuer:nil
                         registrationEndpoint:nil
                           endSessionEndpoint:nil
@@ -102,6 +122,7 @@ NS_ASSUME_NONNULL_BEGIN
                          registrationEndpoint:(nullable NSURL *)registrationEndpoint {
   return [self initWithAuthorizationEndpoint:authorizationEndpoint
                                tokenEndpoint:tokenEndpoint
+                        refreshTokenEndpoint:nil
                                       issuer:nil
                         registrationEndpoint:registrationEndpoint
                           endSessionEndpoint:nil
@@ -113,6 +134,7 @@ NS_ASSUME_NONNULL_BEGIN
                                        issuer:(nullable NSURL *)issuer {
   return [self initWithAuthorizationEndpoint:authorizationEndpoint
                                tokenEndpoint:tokenEndpoint
+                        refreshTokenEndpoint:nil
                                       issuer:issuer
                         registrationEndpoint:nil
                           endSessionEndpoint:nil
@@ -125,6 +147,7 @@ NS_ASSUME_NONNULL_BEGIN
                          registrationEndpoint:(nullable NSURL *)registrationEndpoint {
   return [self initWithAuthorizationEndpoint:authorizationEndpoint
                                tokenEndpoint:tokenEndpoint
+                        refreshTokenEndpoint:nil
                                       issuer:issuer
                         registrationEndpoint:registrationEndpoint
                           endSessionEndpoint:nil
@@ -138,6 +161,7 @@ NS_ASSUME_NONNULL_BEGIN
                            endSessionEndpoint:(nullable NSURL *)endSessionEndpoint {
   return [self initWithAuthorizationEndpoint:authorizationEndpoint
                                tokenEndpoint:tokenEndpoint
+                        refreshTokenEndpoint:nil
                                       issuer:issuer
                         registrationEndpoint:registrationEndpoint
                           endSessionEndpoint:endSessionEndpoint
@@ -147,6 +171,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithDiscoveryDocument:(OIDServiceDiscovery *) discoveryDocument {
   return [self initWithAuthorizationEndpoint:discoveryDocument.authorizationEndpoint
                                tokenEndpoint:discoveryDocument.tokenEndpoint
+                        refreshTokenEndpoint:nil
                                       issuer:discoveryDocument.issuer
                         registrationEndpoint:discoveryDocument.registrationEndpoint
                           endSessionEndpoint:discoveryDocument.endSessionEndpoint
@@ -174,6 +199,8 @@ NS_ASSUME_NONNULL_BEGIN
                                                         forKey:kAuthorizationEndpointKey];
   NSURL *tokenEndpoint = [aDecoder decodeObjectOfClass:[NSURL class]
                                                 forKey:kTokenEndpointKey];
+  NSURL *refreshTokenEndpoint = [aDecoder decodeObjectOfClass:[NSURL class]
+                                                forKey:kRefreshTokenEndpointKey];
   NSURL *issuer = [aDecoder decodeObjectOfClass:[NSURL class]
                                          forKey:kIssuerKey];
   NSURL *registrationEndpoint = [aDecoder decodeObjectOfClass:[NSURL class]
@@ -199,6 +226,7 @@ NS_ASSUME_NONNULL_BEGIN
 
   return [self initWithAuthorizationEndpoint:authorizationEndpoint
                                tokenEndpoint:tokenEndpoint
+                        refreshTokenEndpoint:refreshTokenEndpoint
                                       issuer:issuer
                         registrationEndpoint:registrationEndpoint
                           endSessionEndpoint:endSessionEndpoint

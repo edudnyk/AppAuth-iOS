@@ -54,6 +54,10 @@ typedef void (^OIDServiceConfigurationCreated)
  */
 @property(nonatomic, readonly, nullable) NSURL *endSessionEndpoint;
 
+/*! @brief The token exchange and refresh endpoint URI.
+ */
+@property(nonatomic, readonly, nullable) NSURL *refreshTokenEndpoint;
+
 /*! @brief The discovery document.
  */
 @property(nonatomic, readonly, nullable) OIDServiceDiscovery *discoveryDocument;
@@ -69,6 +73,14 @@ typedef void (^OIDServiceConfigurationCreated)
  */
 - (instancetype)initWithAuthorizationEndpoint:(NSURL *)authorizationEndpoint
                                 tokenEndpoint:(NSURL *)tokenEndpoint;
+
+/*! @param authorizationEndpoint The authorization endpoint URI.
+    @param tokenEndpoint The token exchange endpoint URI.
+    @param refreshTokenEndpoint The token refresh endpoint URI.
+ */
+- (instancetype)initWithAuthorizationEndpoint:(NSURL *)authorizationEndpoint
+                                tokenEndpoint:(NSURL *)tokenEndpoint
+                         refreshTokenEndpoint:(nullable NSURL *)refreshTokenEndpoint;
 
 /*! @param authorizationEndpoint The authorization endpoint URI.
     @param tokenEndpoint The token exchange and refresh endpoint URI.
